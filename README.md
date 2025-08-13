@@ -147,12 +147,12 @@
 <body>
 
 <div class="container">
-    <h1>项目破产概率计算器</h1>
+    <h1>强化破产概率计算器</h1>
     <p style="text-align: center;">根据收益和成本，计算破产概率和建议资金值</p>
 
     <div class="input-group">
         <label for="projectNameInput">项目名称 (可选)</label>
-        <input type="text" id="projectNameInput" placeholder="例如：碎贤者，转贤者">
+        <input type="text" id="projectNameInput" placeholder="例如：95+7,95+10">
     </div>
 
     <div class="input-group">
