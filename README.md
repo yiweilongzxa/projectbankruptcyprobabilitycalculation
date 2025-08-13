@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>项目破产概率计算器</title>
+    <title>项目破产概率计算</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -147,12 +147,12 @@
 <body>
 
 <div class="container">
-    <h1>强化项目风险评估</h1>
-    <p style="text-align: center;">根据收益和成本，计算破产概率和基准资金值</p>
+    <h1>项目破产概率计算器</h1>
+    <p style="text-align: center;">根据收益和成本，计算破产概率和建议资金值</p>
 
     <div class="input-group">
         <label for="projectNameInput">项目名称 (可选)</label>
-        <input type="text" id="projectNameInput" placeholder="例如：新产品开发, 股票A交易策略">
+        <input type="text" id="projectNameInput" placeholder="例如：碎贤者，转贤者">
     </div>
 
     <div class="input-group">
@@ -182,7 +182,7 @@
     </div>
 
     <div class="action-buttons">
-        <button id="calculateBtn">确认计算并保存记录</button>
+        <button id="calculateBtn">确认计算</button>
         <button id="clearRecordsBtn">清除所有记录</button>
     </div>
 
@@ -211,6 +211,7 @@
         const LOCAL_STORAGE_KEY_INPUTS = 'projectRiskInputs';
         const LOCAL_STORAGE_KEY_RECORDS = 'projectRiskRecords';
 
+        // Helper function to parse input strings with k, m, b
         const parseInput = (value) => {
             const lowerCaseValue = value.toLowerCase().trim();
             if (!lowerCaseValue) return NaN;
@@ -241,6 +242,7 @@
             }
         };
 
+        // Format numbers with k, m, b suffixes
         const formatNumber = (num) => {
             if (Math.abs(num) >= 1e9) {
                 return (num / 1e9).toFixed(2) + ' B';
@@ -259,12 +261,14 @@
             return (prob * 100).toFixed(4) + '%';
         };
 
+        // Main calculation logic
         const calculateAndSave = () => {
             const p = parseInput(pInput.value);
             const c0 = parseInput(c0Input.value);
             const w = parseInput(wInput.value);
             const projectName = projectNameInput.value || '未命名项目';
 
+            // Save the current inputs to local storage
             const inputs = {
                 projectName: projectNameInput.value,
                 p: pInput.value,
@@ -316,6 +320,7 @@
             FValueElement.textContent = formatNumber(F);
             fValueElement.textContent = formatProbability(f_w);
 
+            // Save the record
             const newRecord = {
                 id: Date.now(),
                 projectName: projectName,
@@ -328,12 +333,13 @@
             };
 
             const records = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_RECORDS) || '[]');
-            records.unshift(newRecord);
+            records.unshift(newRecord); // Add to the beginning of the list
             localStorage.setItem(LOCAL_STORAGE_KEY_RECORDS, JSON.stringify(records));
 
             displayRecords();
         };
 
+        // Function to display saved records
         const displayRecords = () => {
             recordsList.innerHTML = '';
             const records = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_RECORDS) || '[]');
@@ -355,6 +361,7 @@
             });
         };
         
+        // Function to clear all records
         const clearAllRecords = () => {
             if (confirm('确定要清除所有项目记录吗？此操作无法撤销。')) {
                 localStorage.removeItem(LOCAL_STORAGE_KEY_RECORDS);
@@ -362,6 +369,7 @@
             }
         };
 
+        // Load saved inputs from local storage on page load
         const loadInputs = () => {
             const savedInputs = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_INPUTS));
             if (savedInputs) {
@@ -372,6 +380,7 @@
             }
         };
 
+        // Event Listeners
         calculateBtn.addEventListener('click', calculateAndSave);
         clearRecordsBtn.addEventListener('click', clearAllRecords);
 
@@ -403,8 +412,11 @@
             }
         });
 
+        // Initial setup
         loadInputs();
         displayRecords();
+        // Since we're now using a button for calculation, we don't need a live update on every input change,
+        // but we can still calculate once at the start with loaded values.
         calculateAndSave();
     });
 </script>
